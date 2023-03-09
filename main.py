@@ -1,6 +1,10 @@
 from subprocess import Popen, PIPE
 import os
 import openai
+import pyautogui
+import time
+import pyperclip
+
 
 #to use this, make a custom keyboard shortcut for each language:
 #bash -c "python3 /home/lunkwill/projects/grammarpt/main.py"
@@ -34,18 +38,18 @@ def send_request(request_message):
     messages=request_message
     )
     print(response)
-    corrected = response["choices"][0]["message"]["content"]
+    corrected = response["choices"][0]["message"]["content"].replace("\n","").strip().lstrip()
     print('here', corrected)
     notify(corrected)
-    fill_clipboard(corrected)
-
-def fill_clipboard(text):
-    p = Popen(['xclip', '-selection', 'clipboard'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    output, err = p.communicate(input=text.encode('utf-8'))
-    return output
+    pyperclip.copy(corrected)    
 
 def main():
+    pyautogui.hotkey('ctrl', 'a')
     selected_text = get_primary_clipboard()
-    corrected_grammar = get_better_grammar(selected_text)  
+    get_better_grammar(selected_text.replace("\n", " ").strip().lstrip())  
+    pyautogui.hotkey('ctrl', 'v')
+
+    
+
 
 main()
