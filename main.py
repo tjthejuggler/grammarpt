@@ -69,9 +69,7 @@ def send_request(request_message):
     model="gpt-3.5-turbo",
     messages=request_message
     )
-    print(response)
     corrected = response["choices"][0]["message"]["content"].replace("\n","").strip().lstrip()
-    print('here', corrected)
     notify(corrected)
     pyperclip.copy(corrected)    
     return corrected    
@@ -111,7 +109,6 @@ def main():
             note_type = 'Basic'
             connector = AnkiConnector(deck_name=deck_name, note_type=note_type, allow_duplicate=False)
             connector.add_card(front, back, source)
-            notify("Added to Anki")
         else:
             notify("Too long for highlight grammar fix. Break it into small parts")
     if args.makeankiimage:
@@ -135,7 +132,6 @@ def main():
             note_type = 'Basic'
             connector = AnkiConnector(deck_name=deck_name, note_type=note_type, allow_duplicate=False, back_image=new_file_name)
             connector.add_card(front, back, source)
-            notify("Added to Anki")
         else:
             notify("Too long for highlight grammar fix. Break it into small parts")
 main()
