@@ -3,11 +3,14 @@ import os
 import openai
 import pyautogui
 import pyperclip
-
-
+import subprocess
+from AnkiConnector import AnkiConnector
+import time
+from PIL import Image
+import glob
 
 #to use this, make a custom keyboard shortcut for each language:
-#bash -c "python3 /home/lunkwill/projects/grammarpt/main.py"
+#bash -c "python3 /home/[USERNAME]/projects/grammarpt/main.py -[ARGUMENT]"
 
 def get_args():
     import argparse
@@ -15,16 +18,38 @@ def get_args():
     parser.add_argument('-g', '--grammar', action='store_true', help='automatically fix the grammar of entire textbox')
     parser.add_argument('-i', '--grammaarhighlight', action='store_true', help='fix the grammar of highlighted text')
     parser.add_argument('-c', '--codecondense', action='store_true', help='condense selected code')
+    parser.add_argument('-a', '--makeanki', action='store_true', help='make an anki card from selected text')
+    parser.add_argument('-m', '--makeankiimage', action='store_true', help='make an anki card from selected text and last screenshotted image')
     return parser.parse_args()
 
-#use subrocess and xsel to get the clipboard contents
+def get_active_window():
+    output = subprocess.check_output(['xdotool', 'getactivewindow'])
+    window_id = output.strip()
+    output = subprocess.check_output(['xprop', '-id', window_id, 'WM_CLASS'])
+    class_name = output.decode('utf-8').split('"')[1]
+    return (str(window_id), str(class_name))
+
+def get_firefox_url():
+    window_id, window_class = get_active_window()
+    print(window_class + window_id)
+    if window_class == 'Navigator':
+        subprocess.call(['xdotool', 'key', '--window', window_id, 'ctrl+l'])
+        subprocess.call(['xdotool', 'key', '--window', window_id, 'ctrl+c'])
+        subprocess.call(['xdotool', 'key', '--window', window_id, 'Escape'])
+        subprocess.call(['xdotool', 'key', '--window', window_id, 'Left'])
+        subprocess.call(['xdotool', 'click', '1'])
+        output = subprocess.check_output(['xclip', '-out', '-selection', 'clipboard'])
+        url = output.strip().decode('utf-8')
+        return url
+    else:
+        return None
+
 def get_primary_clipboard():
     p = Popen(['xsel', '-o'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
     output, err = p.communicate()
     output = output.decode('utf-8')
     return output
 
-#create an notify message
 def notify(text):
     print('text')    
     msg = "notify-send ' ' '"+text+"'"
@@ -32,10 +57,12 @@ def notify(text):
 
 def construct_request(prompt, text):    
     item = prompt+text
-    send_request([{"role":"user","content":item}])
+    return send_request([{"role":"user","content":item}])
 
 def send_request(request_message):
-    with open('/home/lunkwill/projects/grammarpt/apikey.txt', 'r') as f:
+    api_location = '~/projects/grammarpt/apikey.txt'
+    api_location = os.path.expanduser(api_location)
+    with open(api_location, 'r') as f:
         api_key = f.read().strip()
     openai.api_key = (api_key)
     response = openai.ChatCompletion.create(
@@ -47,6 +74,7 @@ def send_request(request_message):
     print('here', corrected)
     notify(corrected)
     pyperclip.copy(corrected)    
+    return corrected    
 
 def main():
     args = get_args()
@@ -71,5 +99,47 @@ def main():
             construct_request("Condense this code, only respond with the condensed code.\n\n", selected_text)  
         else:
             notify("Too long for highlight grammar fix. Break it into small parts")
-
+    if args.makeanki:
+        selected_text = get_primary_clipboard()
+        if len(selected_text) < 1000:
+            anki_response = construct_request("Make an Anki Flashcard from the following fact. You are free to use your own knowledge to make the card more professional. Label it Front: and Back: .\n\n", selected_text) 
+            parts = anki_response.split("Front: ")[1].split("Back: ")
+            front, back = [part.strip() for part in parts]
+            url = get_firefox_url()
+            source = url if url else ""
+            deck_name = '...My discoveries'
+            note_type = 'Basic'
+            connector = AnkiConnector(deck_name=deck_name, note_type=note_type, allow_duplicate=False)
+            connector.add_card(front, back, source)
+            notify("Added to Anki")
+        else:
+            notify("Too long for highlight grammar fix. Break it into small parts")
+    if args.makeankiimage:
+        image_dir = '~/Pictures/Screenshots'
+        image_dir = os.path.expanduser(image_dir)
+        image_files = glob.glob(os.path.join(image_dir, '*.png'))
+        image_files.sort(key=os.path.getctime, reverse=True)
+        most_recent_image = image_files[0]
+        image = Image.open(most_recent_image)
+        image = image.convert('RGB')
+        new_file_name = os.path.splitext(most_recent_image)[0].replace(' ', '_') + '.jpg'
+        image.save(new_file_name, 'JPEG')
+        selected_text = get_primary_clipboard()
+        if len(selected_text) < 1000:
+            anki_response = construct_request("Make an Anki Flashcard from the following fact. You are free to use your own knowledge to make the card more professional. Label it Front: and Back: .\n\n", selected_text) 
+            parts = anki_response.split("Front: ")[1].split("Back: ")
+            front, back = [part.strip() for part in parts]
+            url = get_firefox_url()
+            source = url if url else ""
+            deck_name = '...My discoveries'
+            note_type = 'Basic'
+            connector = AnkiConnector(deck_name=deck_name, note_type=note_type, allow_duplicate=False, back_image=new_file_name)
+            connector.add_card(front, back, source)
+            notify("Added to Anki")
+        else:
+            notify("Too long for highlight grammar fix. Break it into small parts")
 main()
+
+
+
+
