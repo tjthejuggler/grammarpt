@@ -43,7 +43,9 @@ class AnkiConnector:
                 }
             })
             # Add the image tag to the back field
-            note['fields']['Back'] += '<br><img src="'+filename+'.jpg"><br><br>source: '+source
+            note['fields']['Back'] += '<br><img src="'+filename+'.jpg"><br><br>source: <a href="'+source+'">'+source+'</a>'
+        else:
+            note['fields']['Back'] += '<br><br>source: <a href="'+source+'">'+source+'</a>'
 
         # Add the note to the deck
         response = requests.post('http://localhost:8765', json={
