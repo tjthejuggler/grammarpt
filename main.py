@@ -15,6 +15,7 @@ import glob
 def get_args():
     import argparse
     parser = argparse.ArgumentParser(description='Translate selected text')
+    parser.add_argument('-o', '--obsidian_inbox', action='store_true', help='append to obsidian inbox')
     parser.add_argument('-g', '--grammar', action='store_true', help='automatically fix the grammar of entire textbox')
     parser.add_argument('-i', '--grammaarhighlight', action='store_true', help='fix the grammar of highlighted text')
     parser.add_argument('-c', '--codecondense', action='store_true', help='condense selected code')
@@ -76,6 +77,16 @@ def send_request(request_message):
 
 def main():
     args = get_args()
+    if args.obsidian_inbox:
+        notify("Appended to obsidian inbox")
+        selected_text = get_primary_clipboard()
+        inbox_dir = "~/Documents/obsidian_note_vault/noteVault/Inbox.md"
+        inbox_dir = os.path.expanduser(inbox_dir)
+        with open(inbox_dir, 'r') as file:
+            original_content = file.read()
+        new_content = selected_text + os.linesep + os.linesep + original_content
+        with open(inbox_dir, 'w') as file:
+            file.write(new_content)
     if args.grammar:
         pyautogui.hotkey('ctrl', 'a')
         selected_text = get_primary_clipboard()
@@ -94,17 +105,29 @@ def main():
     if args.codecondense:
         selected_text = get_primary_clipboard()
         if len(selected_text) < 5000:
-            construct_request("Condense this code, only respond with the condensed code.\n\n", selected_text)  
+            notify("Condensing code...")
+            # Determine the indentation of the first line in the selected text
+            first_line = selected_text.split('\n')[0]
+            indentation = first_line[:len(first_line) - len(first_line.lstrip())]
+            pre_text = '\n'.join([line[:len(line) - len(line.lstrip())] + '#' + line.lstrip() for line in selected_text.split('\n')]) + '\n'
+            construct_request("Condense this code, only respond with the condensed code.\n\n", selected_text)            
+            current_clipboard = pyperclip.paste()
+            # Indent the lines in current_clipboard with the same indentation as the original selected text
+            current_clipboard_indented = '\n'.join([indentation + line for line in current_clipboard.split('\n')])
+            pyperclip.copy(pre_text + current_clipboard_indented)
+            pyautogui.hotkey('ctrl', 'v')            
         else:
             notify("Too long for highlight grammar fix. Break it into small parts")
     if args.makeanki:
         selected_text = get_primary_clipboard()
         if len(selected_text) < 1000:
+            notify("Making Anki card...")
             anki_response = construct_request("Make an Anki Flashcard from the following fact. You are free to use your own knowledge to make the card more professional. Label it Front: and Back: .\n\n", selected_text) 
             parts = anki_response.split("Front: ")[1].split("Back: ")
             front, back = [part.strip() for part in parts]
             url = get_firefox_url()
             source = url if url else ""
+            source = '' if 'Front: ' in source else source
             deck_name = '...My discoveries'
             note_type = 'Basic'
             connector = AnkiConnector(deck_name=deck_name, note_type=note_type, allow_duplicate=False)
@@ -123,11 +146,13 @@ def main():
         image.save(new_file_name, 'JPEG')
         selected_text = get_primary_clipboard()
         if len(selected_text) < 1000:
+            notify("Making Anki card with an image...")
             anki_response = construct_request("Make an Anki Flashcard from the following fact. You are free to use your own knowledge to make the card more professional. Label it Front: and Back: .\n\n", selected_text) 
             parts = anki_response.split("Front: ")[1].split("Back: ")
             front, back = [part.strip() for part in parts]
             url = get_firefox_url()
             source = url if url else ""
+            source = '' if 'Front: ' in source else source
             deck_name = '...My discoveries'
             note_type = 'Basic'
             connector = AnkiConnector(deck_name=deck_name, note_type=note_type, allow_duplicate=False, back_image=new_file_name)

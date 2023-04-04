@@ -38,7 +38,7 @@ def send_request(request_message):
 ankti_to_make_location = '~/Documents/obsidian_note_vault/noteVault/ankis_to_make.txt'
 ankti_to_make_location = os.path.expanduser(ankti_to_make_location)
 
-
+card_creation_failed = False
 with open(ankti_to_make_location, 'r') as f:
     chunks = f.read().split('\n\n')
     for chunk in chunks:
@@ -46,6 +46,7 @@ with open(ankti_to_make_location, 'r') as f:
             fact = chunk.split('|')[0]
             if len(fact) < 1000:
                 if len(fact) > 10:
+                    #notify("Making anki flashcard from the following fact: "+fact)
                     anki_response = construct_request("Make an Anki Flashcard from the following fact. You are free to use your own knowledge to make the card more professional. Label it Front: and Back: .\n\n", fact) 
                     parts = anki_response.split("Front: ")[1].split("Back: ")
                     front, back = [part.strip() for part in parts]
@@ -57,12 +58,20 @@ with open(ankti_to_make_location, 'r') as f:
                     deck_name = '...My discoveries'
                     note_type = 'Basic'
                     connector = AnkiConnector(deck_name=deck_name, note_type=note_type, allow_duplicate=False)
-                    connector.add_card(front, back, source)
+                    card_creation_failed = not connector.add_card(front, back, source)
+                    # if successfully_made:
+                    #     with open(ankti_to_make_location, 'r') as mid_make:
+                    #         full_file = mid_make.read().split('\n\n')
+                    #     full_file.replace(chunk, '')
+                    #     with open(ankti_to_make_location, 'w') as replaced:
+                    #         replaced.write(full_file)
+
                 else:
                     notify("Too short to be a fact.")
             else:
                 notify("Too long for highlight grammar fix. Break it into small parts")
 
+if not card_creation_failed:
 #delete all the text in the file
-with open(ankti_to_make_location, 'w') as f:
-    f.write('')
+    with open(ankti_to_make_location, 'w') as f:
+        f.write('')
