@@ -19,6 +19,7 @@ def get_args():
     parser.add_argument('-g', '--grammar', action='store_true', help='automatically fix the grammar of entire textbox')
     parser.add_argument('-i', '--grammaarhighlight', action='store_true', help='fix the grammar of highlighted text')
     parser.add_argument('-c', '--codecondense', action='store_true', help='condense selected code')
+    parser.add_argument('-f', '--create_function', action='store_true', help='creates a function from selected code')
     parser.add_argument('-a', '--makeanki', action='store_true', help='make an anki card from selected text')
     parser.add_argument('-m', '--makeankiimage', action='store_true', help='make an anki card from selected text and last screenshotted image')
     return parser.parse_args()
@@ -75,6 +76,47 @@ def send_request(request_message):
     pyperclip.copy(corrected)    
     return corrected    
 
+def coding_assistant(notification, prompt):
+    selected_text = get_primary_clipboard()
+    if len(selected_text) < 5000:
+        notify(notification)
+        # Determine the indentation of the first line in the selected text
+        first_line = selected_text.split('\n')[0]
+        indentation = first_line[:len(first_line) - len(first_line.lstrip())]
+        pre_text = '\n'.join([line[:len(line) - len(line.lstrip())] + '#' + line.lstrip() for line in selected_text.split('\n')]) + '\n'
+        construct_request(prompt+"\n\n", selected_text)            
+        current_clipboard = pyperclip.paste()
+        # Indent the lines in current_clipboard with the same indentation as the original selected text
+        current_clipboard_indented = '\n'.join([indentation + line for line in current_clipboard.split('\n')])
+        pyperclip.copy(pre_text + current_clipboard_indented)
+        pyautogui.hotkey('ctrl', 'v')            
+    else:
+        notify("Too long for highlight grammar fix. Break it into small parts")
+
+def coding_assistant_new(notification, prompt):
+    selected_text = get_primary_clipboard()
+    if len(selected_text) < 5000:
+        notify(notification)
+        # Determine the indentation of the first line in the selected text
+        first_line = selected_text.split('\n')[0]
+        indentation = first_line[:len(first_line) - len(first_line.lstrip())]
+        pre_text = '\n'.join([line[:len(line) - len(line.lstrip())] + '#' + line.lstrip() for line in selected_text.split('\n')]) + '\n'
+        construct_request(prompt+"\n\n", selected_text)            
+        current_clipboard = pyperclip.paste()
+        # Indent the lines in current_clipboard with the same indentation as the original selected text
+        current_clipboard_indented = '\n'.join([indentation + line for line in current_clipboard.split('\n')])
+        pyperclip.copy(pre_text + replace_spaces(current_clipboard_indented))
+        pyautogui.hotkey('ctrl', 'v')            
+    else:
+        notify("Too long for highlight grammar fix. Break it into small parts")
+
+
+
+import re
+
+def replace_spaces(text):
+    return re.sub(r'( {4})+', lambda m: '\n' + m.group(0), text)
+
 def main():
     args = get_args()
     if args.obsidian_inbox:
@@ -103,21 +145,9 @@ def main():
         else:
             notify("Too long for highlight grammar fix. Break it into small parts")
     if args.codecondense:
-        selected_text = get_primary_clipboard()
-        if len(selected_text) < 5000:
-            notify("Condensing code...")
-            # Determine the indentation of the first line in the selected text
-            first_line = selected_text.split('\n')[0]
-            indentation = first_line[:len(first_line) - len(first_line.lstrip())]
-            pre_text = '\n'.join([line[:len(line) - len(line.lstrip())] + '#' + line.lstrip() for line in selected_text.split('\n')]) + '\n'
-            construct_request("Condense this code, only respond with the condensed code.\n\n", selected_text)            
-            current_clipboard = pyperclip.paste()
-            # Indent the lines in current_clipboard with the same indentation as the original selected text
-            current_clipboard_indented = '\n'.join([indentation + line for line in current_clipboard.split('\n')])
-            pyperclip.copy(pre_text + current_clipboard_indented)
-            pyautogui.hotkey('ctrl', 'v')            
-        else:
-            notify("Too long for highlight grammar fix. Break it into small parts")
+        coding_assistant("Condensing code...", "Condense this code, only respond with the condensed code.")
+    if args.create_function:
+        coding_assistant_new("Creating function...", "Create a function for this code, only respond with the function, exclude imports.")
     if args.makeanki:
         selected_text = get_primary_clipboard()
         if len(selected_text) < 1000:
