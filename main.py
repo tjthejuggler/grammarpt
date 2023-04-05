@@ -158,7 +158,7 @@ def main():
             url = get_firefox_url()
             source = url if url else ""
             source = '' if 'Front: ' in source else source
-            deck_name = '...My discoveries'
+            deck_name = '...MyDiscoveries'
             note_type = 'Basic'
             connector = AnkiConnector(deck_name=deck_name, note_type=note_type, allow_duplicate=False)
             connector.add_card(front, back, source)
@@ -183,7 +183,7 @@ def main():
             url = get_firefox_url()
             source = url if url else ""
             source = '' if 'Front: ' in source else source
-            deck_name = '...My discoveries'
+            deck_name = '...MyDiscoveries'
             note_type = 'Basic'
             connector = AnkiConnector(deck_name=deck_name, note_type=note_type, allow_duplicate=False, back_image=new_file_name)
             connector.add_card(front, back, source)
