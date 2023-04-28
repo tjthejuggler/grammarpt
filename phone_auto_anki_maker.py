@@ -35,7 +35,10 @@ def send_request(request_message):
     pyperclip.copy(corrected)    
     return corrected  
 
-ankti_to_make_location = '~/Documents/obsidian_note_vault/noteVault/ankis_to_make.txt'
+with open('/home/lunkwill/projects/grammarpt/obsidian_dir.txt', 'r') as f:
+    obsidian_dir = f.read().strip()
+
+ankti_to_make_location = obsidian_dir+'/ankis_to_make.txt'
 ankti_to_make_location = os.path.expanduser(ankti_to_make_location)
 
 card_creation_failed = False
@@ -55,7 +58,7 @@ with open(ankti_to_make_location, 'r') as f:
                     #if source doesn't start with http, add it
                     if source and not source.startswith('http'):
                         source = 'http://'+source
-                    deck_name = '...My discoveries'
+                    deck_name = '...MyDiscoveries'
                     note_type = 'Basic'
                     connector = AnkiConnector(deck_name=deck_name, note_type=note_type, allow_duplicate=False)
                     card_creation_failed = not connector.add_card(front, back, source)

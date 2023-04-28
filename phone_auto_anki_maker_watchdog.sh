@@ -1,6 +1,6 @@
 #!/bin/bash
 
-file_to_watch="$HOME/Documents/obsidian_note_vault/noteVault/ankis_to_make.txt"
+file_to_watch="$HOME/Documents/obsidyen/ankis_to_make.txt"
 python_script="$HOME/projects/grammarpt/phone_auto_anki_maker.py"
 
 while true; do
