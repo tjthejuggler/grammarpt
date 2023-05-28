@@ -8,6 +8,7 @@ from AnkiConnector import AnkiConnector
 import time
 from PIL import Image
 import glob
+import datetime
 
 #to use this, make a custom keyboard shortcut for each language:
 #bash -c "python3 /home/[USERNAME]/projects/grammarpt/main.py -[ARGUMENT]"
@@ -20,8 +21,15 @@ def get_args():
     parser.add_argument('-i', '--grammaarhighlight', action='store_true', help='fix the grammar of highlighted text')
     parser.add_argument('-c', '--codecondense', action='store_true', help='condense selected code')
     parser.add_argument('-f', '--create_function', action='store_true', help='creates a function from selected code')
+    parser.add_argument('-p', '--pip_install', action='store_true', help='gets the pip install command for selected text')
     parser.add_argument('-a', '--makeanki', action='store_true', help='make an anki card from selected text')
     parser.add_argument('-m', '--makeankiimage', action='store_true', help='make an anki card from selected text and last screenshotted image')
+    parser.add_argument('-3', '--chatgpt35', action='store_true', help='ask chatGPT3.5 a question')
+    parser.add_argument('-4', '--chatgpt4', action='store_true', help='ask chatGPT4 a question')
+    parser.add_argument('-e', '--english', action='store_true', help='translate selecte text to english')
+    parser.add_argument('-s', '--spanish', action='store_true', help='translate selecte text to spanish')
+    parser.add_argument('-t', '--turkish', action='store_true', help='translate selecte text to turkish')
+    parser.add_argument('-d', '--deutsch', action='store_true', help='translate selecte text to german')
     return parser.parse_args()
 
 def get_active_window():
@@ -57,24 +65,42 @@ def notify(text):
     msg = "notify-send ' ' '"+text+"'"
     os.system(msg)
 
-def construct_request(prompt, text):    
-    item = prompt+text
-    return send_request([{"role":"user","content":item}])
 
-def send_request(request_message):
+def save_request_history(item, corrected):
+    history_file_path = '/home/lunkwill/Documents/obsidyen/tail/gpt-api-requests.txt'
+    timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
+    with open(history_file_path, 'a') as f:
+        f.write(f"{timestamp}\nItem: {item}\nCorrected: {corrected}\n\n")
+
+
+def construct_request(prompt, text, model_version=3.5):    
+    notify("Sending request to GPT-"+str(model_version))
+    item = prompt+text
+    corrected = send_request([{"role":"user","content":item}], model_version)
+    save_request_history(item, corrected)
+    return corrected
+
+
+def send_request(request_message, model_version):
     api_location = '~/projects/grammarpt/apikey.txt'
     api_location = os.path.expanduser(api_location)
     with open(api_location, 'r') as f:
         api_key = f.read().strip()
-    openai.api_key = (api_key)
+    openai.api_key = (api_key)    
+    if model_version == 4:
+        model_name = "gpt-4"
+    else:
+        model_name = "gpt-3.5-turbo"    
     response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo",
-    messages=request_message
+        model=model_name,
+        messages=request_message
     )
     corrected = response["choices"][0]["message"]["content"].replace("\n","").strip().lstrip()
     notify(corrected)
     pyperclip.copy(corrected)    
-    return corrected    
+    return corrected  
+
 
 def coding_assistant(notification, prompt):
     selected_text = get_primary_clipboard()
@@ -119,6 +145,18 @@ def replace_spaces(text):
 
 def main():
     args = get_args()
+    if args.english:
+        selected_text = get_primary_clipboard()
+        construct_request("Translate this to English: .\n\n", selected_text.strip().lstrip())
+    if args.spanish:
+        selected_text = get_primary_clipboard()
+        construct_request("Translate this to Spanish: .\n\n", selected_text.strip().lstrip())
+    if args.turkish:
+        selected_text = get_primary_clipboard()
+        construct_request("Translate this to Turkish: .\n\n", selected_text.strip().lstrip())
+    if args.deutsch:
+        selected_text = get_primary_clipboard()
+        construct_request("Translate this to Deutsch: .\n\n", selected_text.strip().lstrip())
     if args.obsidian_inbox:
         notify("Appended to obsidian inbox")
         selected_text = get_primary_clipboard()
@@ -144,6 +182,25 @@ def main():
             construct_request("Fix the grammar, only respond with the corrected text.\n\n", selected_text.replace("\n", " ").strip().lstrip())
         else:
             notify("Too long for highlight grammar fix. Break it into small parts")
+    if args.chatgpt35:
+        notify("in here")
+        selected_text = get_primary_clipboard()
+        if len(selected_text) < 10000:
+            construct_request("", selected_text.strip().lstrip())
+        else:
+            notify("Your chatGPT3.5 request is too long. Break it into small parts")
+    if args.chatgpt4:
+        selected_text = get_primary_clipboard()
+        if len(selected_text) < 10000:
+            construct_request("4", selected_text.strip().lstrip(),4)
+        else:
+            notify("Your chatGPT4 request is too long. Break it into small parts")
+    if args.pip_install:
+        selected_text = get_primary_clipboard()
+        if len(selected_text) < 1000:
+            construct_request("What is the pip install command for this? .\n\n", selected_text.strip().lstrip()+"\n\nAnswer only with the pip install command.")
+        else:
+            notify("Your pip install request is too long. Break it into small parts")
     if args.codecondense:
         coding_assistant("Condensing code...", "Condense this code, only respond with the condensed code.")
     if args.create_function:
