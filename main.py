@@ -222,7 +222,7 @@ def main():
         else:
             notify("Too long for highlight grammar fix. Break it into small parts")
     if args.makeankiimage:
-        image_dir = '~/Pictures/Screenshots'
+        image_dir = '~/Pictures'
         image_dir = os.path.expanduser(image_dir)
         image_files = glob.glob(os.path.join(image_dir, '*.png'))
         image_files.sort(key=os.path.getctime, reverse=True)
