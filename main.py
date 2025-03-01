@@ -1,16 +1,17 @@
 from subprocess import Popen, PIPE
 import os
-import openai
-import pyautogui
-import pyperclip
+#import openai
 import subprocess
 from AnkiConnector import AnkiConnector
 import time
 from PIL import Image
 import glob
+import pyautogui
+import pyperclip
+from groq import AsyncGroq as Groq
 
 #to use this, make a custom keyboard shortcut for each language:
-#bash -c "python3 /home/[USERNAME]/projects/grammarpt/main.py -[ARGUMENT]"
+#bash -c "python3 /home/[USERNAME]/Projects/grammarpt/main.py -[ARGUMENT]"
 
 def get_args():
     import argparse
@@ -57,12 +58,12 @@ def notify(text):
     msg = "notify-send ' ' '"+text+"'"
     os.system(msg)
 
-def construct_request(prompt, text):    
+async def construct_request(prompt, text):
     item = prompt+text
-    return send_request([{"role":"user","content":item}])
+    return await send_request([{"role":"user","content":item}])
 
-def send_request(request_message):
-    api_location = '~/projects/grammarpt/apikey.txt'
+def send_openai_request(request_message):
+    api_location = '~/Projects/grammarpt/apikey.txt'
     api_location = os.path.expanduser(api_location)
     with open(api_location, 'r') as f:
         api_key = f.read().strip()
@@ -74,9 +75,28 @@ def send_request(request_message):
     corrected = response["choices"][0]["message"]["content"].replace("\n","").strip().lstrip()
     notify(corrected)
     pyperclip.copy(corrected)    
-    return corrected    
+    return corrected
 
-def coding_assistant(notification, prompt):
+async def send_request(request_message):
+    api_location = '~/Projects/grammarpt/groq_apikey.txt'
+    api_location = os.path.expanduser(api_location)
+    with open(api_location, 'r') as f:
+        api_key = f.read().strip()
+    
+    client = Groq(api_key=api_key)
+    
+    response = await client.chat.completions.create(
+        messages=request_message,
+        model="deepseek-r1-distill-llama-70b"
+    )
+    
+    corrected = response.choices[0].message.content.replace("\n","").strip().lstrip()
+    notify(corrected)
+    pyperclip.copy(corrected)
+    print(corrected)
+    return corrected
+
+async def coding_assistant(notification, prompt):
     selected_text = get_primary_clipboard()
     if len(selected_text) < 5000:
         notify(notification)
@@ -84,16 +104,16 @@ def coding_assistant(notification, prompt):
         first_line = selected_text.split('\n')[0]
         indentation = first_line[:len(first_line) - len(first_line.lstrip())]
         pre_text = '\n'.join([line[:len(line) - len(line.lstrip())] + '#' + line.lstrip() for line in selected_text.split('\n')]) + '\n'
-        construct_request(prompt+"\n\n", selected_text)            
+        await construct_request(prompt+"\n\n", selected_text)
         current_clipboard = pyperclip.paste()
         # Indent the lines in current_clipboard with the same indentation as the original selected text
         current_clipboard_indented = '\n'.join([indentation + line for line in current_clipboard.split('\n')])
         pyperclip.copy(pre_text + current_clipboard_indented)
-        pyautogui.hotkey('ctrl', 'v')            
+        pyautogui.hotkey('ctrl', 'v')
     else:
         notify("Too long for highlight grammar fix. Break it into small parts")
 
-def coding_assistant_new(notification, prompt):
+async def coding_assistant_new(notification, prompt):
     selected_text = get_primary_clipboard()
     if len(selected_text) < 5000:
         notify(notification)
@@ -101,12 +121,12 @@ def coding_assistant_new(notification, prompt):
         first_line = selected_text.split('\n')[0]
         indentation = first_line[:len(first_line) - len(first_line.lstrip())]
         pre_text = '\n'.join([line[:len(line) - len(line.lstrip())] + '#' + line.lstrip() for line in selected_text.split('\n')]) + '\n'
-        construct_request(prompt+"\n\n", selected_text)            
+        await construct_request(prompt+"\n\n", selected_text)
         current_clipboard = pyperclip.paste()
         # Indent the lines in current_clipboard with the same indentation as the original selected text
         current_clipboard_indented = '\n'.join([indentation + line for line in current_clipboard.split('\n')])
         pyperclip.copy(pre_text + replace_spaces(current_clipboard_indented))
-        pyautogui.hotkey('ctrl', 'v')            
+        pyautogui.hotkey('ctrl', 'v')
     else:
         notify("Too long for highlight grammar fix. Break it into small parts")
 
@@ -117,7 +137,7 @@ import re
 def replace_spaces(text):
     return re.sub(r'( {4})+', lambda m: '\n' + m.group(0), text)
 
-def main():
+async def main():
     args = get_args()
     if args.obsidian_inbox:
         notify("Appended to obsidian inbox")
@@ -133,26 +153,27 @@ def main():
         pyautogui.hotkey('ctrl', 'a')
         selected_text = get_primary_clipboard()
         if len(selected_text) < 1000:
-            construct_request("Fix the grammar, only respond with the corrected text.\n\n", selected_text.replace("\n", " ").strip().lstrip())  
+            await construct_request("Fix the grammar, only respond with the corrected text.\n\n", selected_text.replace("\n", " ").strip().lstrip())
             pyautogui.hotkey('ctrl', 'v')
         else:
-            notify("Too long for auto grammar fix. Use grammar highlight.")            
+            notify("Too long for auto grammar fix. Use grammar highlight.")
             pyautogui.press('right') #press right arrow to clear select all
     if args.grammaarhighlight:
         selected_text = get_primary_clipboard()
         if len(selected_text) < 10000:
-            construct_request("Fix the grammar, only respond with the corrected text.\n\n", selected_text.replace("\n", " ").strip().lstrip())
+            await construct_request("Fix the grammar, only respond with the corrected text.\n\n", selected_text.replace("\n", " ").strip().lstrip())
         else:
             notify("Too long for highlight grammar fix. Break it into small parts")
     if args.codecondense:
-        coding_assistant("Condensing code...", "Condense this code, only respond with the condensed code.")
+        await coding_assistant("Condensing code...", "Condense this code, only respond with the condensed code.")
     if args.create_function:
-        coding_assistant_new("Creating function...", "Create a function for this code, only respond with the function, exclude imports.")
+        await coding_assistant_new("Creating function...", "Create a function for this code, only respond with the function, exclude imports.")
     if args.makeanki:
-        selected_text = get_primary_clipboard()
+        #selected_text = get_primary_clipboard()
+        selected_text = "dogs are usually bigger than cats"
         if len(selected_text) < 1000:
             notify("Making Anki card...")
-            anki_response = construct_request("Make an Anki Flashcard from the following fact. You are free to use your own knowledge to make the card more professional. Label it Front: and Back: .\n\n", selected_text) 
+            anki_response = await construct_request("Make an Anki Flashcard from the following fact. You are free to use your own knowledge to make the card more professional. Label it Front: and Back: .\n\n", selected_text)
             parts = anki_response.split("Front: ")[1].split("Back: ")
             front, back = [part.strip() for part in parts]
             url = get_firefox_url()
@@ -177,7 +198,7 @@ def main():
         selected_text = get_primary_clipboard()
         if len(selected_text) < 1000:
             notify("Making Anki card with an image...")
-            anki_response = construct_request("Make an Anki Flashcard from the following fact. You are free to use your own knowledge to make the card more professional. Label it Front: and Back: .\n\n", selected_text) 
+            anki_response = await construct_request("Make an Anki Flashcard from the following fact. You are free to use your own knowledge to make the card more professional. Label it Front: and Back: .\n\n", selected_text)
             parts = anki_response.split("Front: ")[1].split("Back: ")
             front, back = [part.strip() for part in parts]
             url = get_firefox_url()
@@ -189,7 +210,10 @@ def main():
             connector.add_card(front, back, source)
         else:
             notify("Too long for highlight grammar fix. Break it into small parts")
-main()
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
 
 
 

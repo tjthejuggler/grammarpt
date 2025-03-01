@@ -55,7 +55,7 @@ with open(ankti_to_make_location, 'r') as f:
                     #if source doesn't start with http, add it
                     if source and not source.startswith('http'):
                         source = 'http://'+source
-                    deck_name = '...My discoveries'
+                    deck_name = '...MyDiscoveries'
                     note_type = 'Basic'
                     connector = AnkiConnector(deck_name=deck_name, note_type=note_type, allow_duplicate=False)
                     card_creation_failed = not connector.add_card(front, back, source)
