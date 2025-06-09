@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Phone Auto Anki Maker
+Exec=/home/twain/Projects/grammarpt/phone_auto_anki_maker_watchdog.sh
+Terminal=false
+StartupNotify=false
+Path=/home/twain/Projects/grammarpt

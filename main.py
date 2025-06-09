@@ -88,7 +88,7 @@ async def send_request(request_message):
     response = await client.chat.completions.create(
         messages=request_message,
         model="deepseek-r1-distill-llama-70b"
-    )
+    )                   
     
     corrected = response.choices[0].message.content.replace("\n","").strip().lstrip()
     notify(corrected)

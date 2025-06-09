@@ -1,2 +1,5 @@
 apikey.txt
 groq_apikey.txt
+/venv
+deepseek_api.txt
+watchdog.log

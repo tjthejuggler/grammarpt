@@ -1,4 +1,4 @@
-#!/home/twain/Projects/grammarpt/venv/bin/python3
+#!/home/twain/Projects/grammarpt/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

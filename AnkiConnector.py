@@ -2,10 +2,10 @@ import requests
 import base64
 import os
 
-def notify(text):
-    print('text')    
-    msg = "notify-send ' ' '"+text+"'"
-    os.system(msg)
+def notify(text): # This notify is within AnkiConnector, may differ from the main script's
+    print(f"AnkiConnector Notify: {text}") # Changed to print for less dependency during testing
+    # msg = "notify-send ' ' '"+text+"'" # Original line, can be restored later
+    # os.system(msg)
 
 
 class AnkiConnector:
@@ -61,35 +61,40 @@ class AnkiConnector:
                 'note': note
             }
         })
-        #get the type 
-        # of response.text
         
-        noteid = response.text.replace('{"result":','').replace(', "error": null}','')
+        try:
+            response_json = response.json()
+        except ValueError: # JSONDecodeError in Python 3.5+
+            notify(f"AnkiConnect returned non-JSON response: {response.text}")
+            print(f"AnkiConnect returned non-JSON response: {response.text}")
+            with open('response.txt', 'w') as f:
+                f.write(f"Non-JSON response: {response.text}")
+            return False
 
-        #notify("checking!!!", type(response.text))
-        with open('/home/lunkwill/projects/grammarpt/response.txt', 'w') as f:
-            f.write(response.text)
+        with open('response.txt', 'w') as f: # Log the full JSON response
+            f.write(response.text) # response.text is already a string
 
-        #convert response.text to a dict {"result": 1680192958648, "error": null}
-        # with open('/home/lunkwill/projects/grammarpt/response.txt', 'r') as f:
-        #     response_text = f.read()
-        
+        api_error = response_json.get('error')
+        if api_error:
+            error_message = f"AnkiConnect API error: {api_error}"
+            notify(error_message)
+            print(error_message)
+            return False # Card creation failed due to API error
 
-        
-        return(self.verify_card_created(int(noteid)))
+        noteid = response_json.get('result')
+        if noteid is None:
+            error_message = f"AnkiConnect response missing 'result' (noteId): {response.text}"
+            notify(error_message)
+            print(error_message)
+            return False # Card creation failed, no noteId
 
-        # if response.status_code == 200:
-        #     notify('Card added to the deck.', response.result)
-        #     print('Card added to the deck.')
-        #     #save response to a text file
-        #     with open('/home/lunkwill/projects/grammarpt/response.txt', 'w') as f:
-        #         f.write(response.text)
-            
-        #     return(response.result)
-
-        # else:
-        #     print('An error occurred:', response.text)
-
+        try:
+            return self.verify_card_created(int(noteid))
+        except ValueError:
+            error_message = f"AnkiConnect returned non-integer noteId: {noteid}"
+            notify(error_message)
+            print(error_message)
+            return False
 
     def verify_card_created(self, note_id):
         #notify('verifying card creation')
@@ -100,44 +105,32 @@ class AnkiConnector:
                 'notes': [note_id]
             }
         })
-        print(response.text)
-        if str(note_id) in response.text:
-            notify('Card created successfully.')
-            return True
-        else:
-            notify('An error occurred:'+ response.text)
-            print('An error occurred:'+ response.text)
+        print(f"Verification response: {response.text}")
+        try:
+            response_json = response.json()
+            if response_json.get('error'):
+                notify(f"Verification error: {response_json.get('error')}")
+                print(f"Verification error: {response_json.get('error')}")
+                return False
+            if response_json.get('result') and len(response_json['result']) > 0:
+                 # Check if the note_id is present in any of the fields of the first result
+                if any(str(note_id) in str(field_value) for field_value in response_json['result'][0].values()):
+                     notify('Card created successfully (verified by notesInfo).')
+                     return True
+                # Fallback check on raw text if specific field check is too complex or note_id format varies
+                elif str(note_id) in response.text: # Check if note_id is mentioned anywhere in the successful response
+                    notify('Card created successfully (verified by note_id in response text).')
+                    return True
+            notify(f"Card verification failed, noteId {note_id} not found clearly in notesInfo response: {response.text}")
             return False
-
-    # def add_card(self, front, back, back_image=None):
-    #     # Create the note
-    #     note = {
-    #         'deckName': self.deck_name,
-    #         'modelName': self.note_type,
-    #         'fields': {
-    #             'Front': front,
-    #             'Back': back
-    #         },
-    #         'options': {
-    #             'allowDuplicate': self.allow_duplicate
-    #         },
-    #         'tags': []
-    #     }
-
-    #     # Add the note to the deck
-    #     response = requests.post('http://localhost:8765', json={
-    #         'action': 'addNote',
-    #         'version': 6,
-    #         'params': {
-    #             'note': note
-    #         }
-    #     })
-
-    #     if response.status_code == 200:
-    #         print('Card added to the deck.')
-    #     else:
-    #         print('An error occurred:', response.text)
-
+        except ValueError: # JSONDecodeError
+            notify(f"Verification response was not valid JSON: {response.text}")
+            print(f"Verification response was not valid JSON: {response.text}")
+            # Fallback: simple check if note_id is in the raw text (less reliable)
+            if str(note_id) in response.text:
+                notify('Card created successfully (verified by note_id in non-JSON response text - less reliable).')
+                return True
+            return False
 
 
 #FOR TESTING
