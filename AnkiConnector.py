@@ -7,7 +7,6 @@ def notify(text): # This notify is within AnkiConnector, may differ from the mai
     # msg = "notify-send ' ' '"+text+"'" # Original line, can be restored later
     # os.system(msg)
 
-
 class AnkiConnector:
     def __init__(self, deck_name='Default', note_type='Basic', allow_duplicate=False, back_image=None):
         self.deck_name = deck_name
