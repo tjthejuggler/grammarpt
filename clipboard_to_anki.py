@@ -4,6 +4,7 @@ import sys
 import os
 from AnkiConnector import AnkiConnector
 from openai import OpenAI
+from anki_utils import ensure_anki_running
 
 def notify(text):
     print(f"Notification: {text}")  # Always print for logging
@@ -123,6 +124,9 @@ def clipboard_to_anki():
             # Create Anki card
             deck_name = '...MyDiscoveries2'
             note_type = 'Basic'
+            if not ensure_anki_running():
+                notify("Could not start or connect to Anki. Please start Anki manually.")
+                return
             connector = AnkiConnector(deck_name=deck_name, note_type=note_type, allow_duplicate=False)
             
             if connector.add_card(front, back, ""):
