@@ -15,26 +15,9 @@ echo "=== Clipboard contents ==="
 echo "$CLIP"
 echo "=== End clipboard contents ==="
 
-# Extract JSON array from clipboard (first match, even if surrounded by other text)
-JSON=$(echo "$CLIP" | perl -0777 -ne 'print $1 if /(\[.*?\])/s')
-if [ -z "$JSON" ]; then
-    echo "[DEBUG] First regex failed, trying greedy match..."
-    JSON=$(echo "$CLIP" | perl -0777 -ne 'print $1 if /(\[.*\])/s')
-fi
-
-if [ -z "$JSON" ]; then
-    echo "[DEBUG] Greedy regex also failed."
-    echo "No JSON array found in clipboard."
-    exit 1
-fi
-
-echo "=== Extracted JSON ==="
-echo "$JSON"
-echo "=== End extracted JSON ==="
-
-# Write to a temp file
+# Write clipboard content to a temp file (let Python handle JSON extraction)
 TMPFILE=$(mktemp /tmp/anki_json.XXXXXX.json)
-echo "$JSON" > "$TMPFILE"
+echo "$CLIP" > "$TMPFILE"
 
 # Run the Python app (assumes script is in ~/Projects/grammarpt)
 python3 ~/Projects/grammarpt/json_to_anki.py "$TMPFILE"

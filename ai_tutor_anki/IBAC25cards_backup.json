@@ -1,0 +1,458 @@
+[
+  
+  {
+    "front": "What are 'sidebands' in bioacoustics, particularly in the context of nonlinear phenomena (NLP)?",
+    "back": "Sidebands are additional frequency components that appear symmetrically above and below the fundamental frequency (and its harmonics) in a sound's spectrogram. They result from frequency or amplitude modulation of the primary vocal fold vibration.",
+    "source": "Abstract S1-2: 'The hidden complexity of African Penguin begging calls...'"
+  },
+  {
+    "front": "How do sidebands contribute to the communicative effectiveness of distress signals, beyond just being 'jarring'?",
+    "back": "Sidebands, as a structured form of nonlinearity, can convey specific information such as individual identity through their unique modulation patterns. They can also enhance the perception of urgency or severity by indicating a structured physiological instability in vocal production.",
+    "source": "Abstract S1-2: 'The hidden complexity of African Penguin begging calls...'"
+  },
+  {
+    "front": "In a Convolutional Neural Network (CNN), what is a 'convolutional filter' (or kernel) and what is its primary role in processing a spectrogram?",
+    "back": "A convolutional filter is a small matrix that slides over an input (like a spectrogram). Its primary role is 'feature detection,' identifying specific patterns such as edges, textures, or the distinct visual signatures of NLPs.",
+    "source": "Abstract S1-2: 'The hidden complexity of African Penguin begging calls...'"
+  },
+  {
+    "front": "What is the main purpose of a 'pooling layer' in a Convolutional Neural Network (CNN) after convolutional layers?",
+    "back": "Pooling layers reduce the spatial dimensions (size) of feature maps. This reduces the amount of data, speeds computation, and makes feature detection more robust to small shifts or variations in their exact position (translational invariance).",
+    "source": "Abstract S1-2: 'The hidden complexity of African Penguin begging calls...'"
+  },
+  {
+    "front": "How does 'Max Pooling' differ from other types of pooling layers, like 'Average Pooling'?",
+    "back": "Max Pooling selects the *maximum* value from a region, focusing on the strongest feature activation. Average Pooling calculates the *average* value, smoothing the feature map and retaining more overall activity information.",
+    "source": "Abstract S1-2: 'The hidden complexity of African Penguin begging calls...'"
+  },
+  {
+    "front": "What is 'hierarchical feature learning' in the context of CNNs analyzing spectrograms?",
+    "back": "It's the process where CNNs learn features in increasing complexity: lower layers detect basic elements (e.g., edges), intermediate layers combine these for complex patterns (e.g., sideband shapes), and higher layers form abstract representations for classification.",
+    "source": "Abstract S1-2: 'The hidden complexity of African Penguin begging calls...'"
+  },
+  {
+    "front": "How can physical distress or disease lead to increased Nonlinear Phenomena (NLP) in animal vocalizations?",
+    "back": "Disease or physical distress can cause physiological changes like swollen vocal membranes, inflammation, mucus buildup, or muscle weakness. These alter the mass, tension, or symmetry of vocal folds, disrupting normal vibration and inducing chaotic or nonlinear acoustic regimes.",
+    "source": "Abstract S1-2: 'The hidden complexity of African Penguin begging calls...' & Abstract S1-3: ''Monkey yodels'...' "
+  },
+  {
+    "front": "How do 'asymmetries in vocal fold oscillations' or 'involvement of secondary structures' lead to biphonation?",
+    "back": "Asymmetries can cause vocal folds to oscillate independently at distinct, non-harmonically related frequencies. Secondary structures (e.g., vocal membranes, air sacs) can vibrate independently alongside primary vocal folds, creating two distinct sound sources with their own fundamental frequencies, resulting in biphonation.",
+    "source": "Abstract S1-6: 'Biphonation in animal vocalizations...'"
+  },
+  {
+    "front": "What are two primary challenges for deep learning models in bioacoustics when dealing with natural soundscapes?",
+    "back": "1. Lots of background noise and masking from other sounds.\n2. Scarcity of labeled training data compared to other domains.",
+    "source": "Abstract S2-1: 'Towards improved species identification in soundscapes'"
+  },
+  {
+    "front": "Why is background noise particularly problematic for deep learning models in bioacoustics?",
+    "back": "Noise can mask target vocalizations due to frequency overlap, making feature extraction difficult, leading to poor generalization in varied environments, and increasing false positives/negatives.",
+    "source": "Abstract S2-1: 'Towards improved species identification in soundscapes'"
+  },
+  {
+    "front": "Name two methods to address noise in deep learning for bioacoustics, beyond just using clean data.",
+    "back": "1. Data augmentation (mixing clean calls with diverse noise).\n2. Environmental noise suppression techniques (e.g., spectral subtraction, Wiener filtering) as a pre-processing step.",
+    "source": "General concept discussed, related to S2-1"
+  },
+  {
+    "front": "What are some reasons for data scarcity in bioacoustics compared to other deep learning domains?",
+    "back": "Less historical interest/funding, difficulty of recording in uncontrolled natural environments, and high labor/expert overhead for manual annotation.",
+    "source": "General concept discussed"
+  },
+  {
+    "front": "How can unsupervised learning help address data scarcity in bioacoustics?",
+    "back": "It can identify patterns and cluster similar sounds in large amounts of unlabeled audio data, helping to organize and potentially categorize vocalizations without explicit human labels.",
+    "source": "Abstract S2-2: 'Scaling vision transformers for acoustic biodiversity assessments'"
+  },
+  {
+    "front": "Explain the concepts of 'pre-training' and 'transfer learning' in deep learning for bioacoustics.",
+    "back": "Pre-training: Training a model on a large, general bioacoustic dataset to learn fundamental features. Transfer Learning: Fine-tuning this pre-trained model on a smaller, specific labeled dataset for a target task, leveraging the existing learned knowledge.",
+    "source": "General concept discussed, implied by S2-2"
+  },
+  {
+    "front": "What is a Vision Transformer (ViT) and how is it applied to bioacoustics?",
+    "back": "ViTs are deep learning models originally for image recognition. In bioacoustics, they treat spectrograms (visual representations of sound) as images to identify patterns and species vocalizations.",
+    "source": "Abstract S2-2: 'Scaling vision transformers for acoustic biodiversity assessments'"
+  },
+  {
+    "front": "What are key advantages of Vision Transformers (ViTs) for comprehensive bioacoustic biodiversity assessments?",
+    "back": "ViTs excel at capturing global context and long-range dependencies across spectrograms, offer strong scalability with large datasets and model sizes, and can flexibly handle diverse acoustic features from various taxonomic groups.",
+    "source": "Abstract S2-2: 'Scaling vision transformers for acoustic biodiversity assessments'"
+  },
+  {
+    "front": "What new approach is proposed in Abstract S2-2 for integrating acoustic data from different taxonomic groups into a single model?",
+    "back": "A new time-frequency representation is proposed to integrate diverse acoustic data (birds, frogs, mammals, cicadas, crickets) into a single Vision Transformer model.",
+    "source": "Abstract S2-2: 'Scaling vision transformers for acoustic biodiversity assessments'"
+  },
+  {
+    "front": "How can AI-analyzed bioacoustic data provide insights for conservation beyond just species presence/absence?",
+    "back": "It can reveal behavioral states (e.g., stress, mating), communication patterns (sequencing of calls), track population trends over time, and characterize overall ecosystem health through soundscape analysis.",
+    "source": "Abstract S2-4: 'Using AI to Crack the Code of Hawaiian Monk Seal Chatter', Abstract S2-3: 'Pied flycatcher males and AI-based models rely on similar features for song discrimination at the population level'"
+  },
+  {
+    "front": "What specific ecological finding did AI models reveal about pied flycatcher song discrimination?",
+    "back": "Custom explainable AI models suggested the first part of the song (first syllables) as key features for population-level classification, aligning with how the birds themselves perceive song differences.",
+    "source": "Abstract S2-3: 'Pied flycatcher males and AI-based models rely on similar features for song discrimination at the population level'"
+  },
+  {
+    "front": "What deep learning network was successfully used to analyze Hawaiian Monk Seal chatter?",
+    "back": "A YOLO (You Only Look Once) deep-learning network was used to detect and classify calls, achieving 95% accuracy.",
+    "source": "Abstract S2-4: 'Using AI to Crack the Code of Hawaiian Monk Seal Chatter'"
+  },
+  {
+    "front": "What was a key finding from the AI analysis of Hawaiian Monk Seal vocal patterns?",
+    "back": "The AI detector allowed investigation of vocal patterns in activity in relation to physiological status and call sequencing within bouts, validating trends observed in manually annotated data.",
+    "source": "Abstract S2-4: 'Using AI to Crack the Code of Hawaiian Monk Seal Chatter'"
+  },
+  {
+    "front": "What is the goal of the STRELKA project for canine bioacoustics research?",
+    "back": "To create a modular, process-oriented machine learning pipeline to support canine bioacoustics research in lab and field settings, and build a large-scale, open-access dataset of annotated vocalizations for dogs.",
+    "source": "Abstract S2-5: 'But what does the dog say? Toward a modular machine learning pipeline for canine bioacoustics research'"
+  },
+  {
+    "front": "Why is citizen science valuable for bioacoustic research and conservation?",
+    "back": "It increases data contribution, allows for unprecedented spatial and temporal scale of monitoring, offers cost-effectiveness, brings diverse perspectives, aids in data validation, and fosters public engagement/education for conservation.",
+    "source": "Abstract S2-6: 'Deep learning for acoustic classification of Orthoptera and Cicadidae in Switzerland'"
+  },
+  {
+    "front": "What specific taxonomic groups are the focus of deep learning classification in Switzerland, as described in one abstract?",
+    "back": "Orthoptera (grasshoppers, crickets) and Cicadidae (cicadas).",
+    "source": "Abstract S2-6: 'Deep learning for acoustic classification of Orthoptera and Cicadidae in Switzerland'"
+  },
+  {
+    "front": "What are two primary challenges for deep learning models in bioacoustics when dealing with natural soundscapes?",
+    "back": "1. Lots of background noise and masking from other sounds.\n2. Scarcity of labeled training data compared to other domains.",
+    "source": "Abstract S2-1: 'Towards improved species identification in soundscapes'"
+  },
+  {
+    "front": "Why is background noise particularly problematic for deep learning models in bioacoustics?",
+    "back": "Noise can mask target vocalizations due to frequency overlap, making feature extraction difficult, leading to poor generalization in varied environments, and increasing false positives/negatives.",
+    "source": "Abstract S2-1: 'Towards improved species identification in soundscapes'"
+  },
+  {
+    "front": "Name two methods to address noise in deep learning for bioacoustics, beyond just using clean data.",
+    "back": "1. Data augmentation (mixing clean calls with diverse noise).\n2. Environmental noise suppression techniques (e.g., spectral subtraction, Wiener filtering) as a pre-processing step.",
+    "source": "General concept discussed, related to S2-1"
+  },
+  {
+    "front": "What are some reasons for data scarcity in bioacoustics compared to other deep learning domains?",
+    "back": "Less historical interest/funding, difficulty of recording in uncontrolled natural environments, and high labor/expert overhead for manual annotation.",
+    "source": "General concept discussed"
+  },
+  {
+    "front": "How can unsupervised learning help address data scarcity in bioacoustics?",
+    "back": "It can identify patterns and cluster similar sounds in large amounts of unlabeled audio data, helping to organize and potentially categorize vocalizations without explicit human labels.",
+    "source": "Abstract S2-2: 'Scaling vision transformers for acoustic biodiversity assessments'"
+  },
+  {
+    "front": "Explain the concepts of 'pre-training' and 'transfer learning' in deep learning for bioacoustics.",
+    "back": "Pre-training: Training a model on a large, general bioacoustic dataset to learn fundamental features. Transfer Learning: Fine-tuning this pre-trained model on a smaller, specific labeled dataset for a target task, leveraging the existing learned knowledge.",
+    "source": "General concept discussed, implied by S2-2"
+  },
+  {
+    "front": "What is a Vision Transformer (ViT) and how is it applied to bioacoustics?",
+    "back": "ViTs are deep learning models originally for image recognition. In bioacoustics, they treat spectrograms (visual representations of sound) as images to identify patterns and species vocalizations.",
+    "source": "Abstract S2-2: 'Scaling vision transformers for acoustic biodiversity assessments'"
+  },
+  {
+    "front": "What are key advantages of Vision Transformers (ViTs) for comprehensive bioacoustic biodiversity assessments?",
+    "back": "ViTs excel at capturing global context and long-range dependencies across spectrograms, offer strong scalability with large datasets and model sizes, and can flexibly handle diverse acoustic features from various taxonomic groups.",
+    "source": "Abstract S2-2: 'Scaling vision transformers for acoustic biodiversity assessments'"
+  },
+  {
+    "front": "What new approach is proposed in some research for integrating acoustic data from different taxonomic groups into a single model?",
+    "back": "A new time-frequency representation is proposed to integrate diverse acoustic data (birds, frogs, mammals, cicadas, crickets) into a single Vision Transformer model.",
+    "source": "Abstract S2-2: 'Scaling vision transformers for acoustic biodiversity assessments'"
+  },
+  {
+    "front": "How can AI-analyzed bioacoustic data provide insights for conservation beyond just species presence/absence?",
+    "back": "It can reveal behavioral states (e.g., stress, mating), communication patterns (sequencing of calls), track population trends over time, and characterize overall ecosystem health through soundscape analysis.",
+    "source": "Abstract S2-4: 'Using AI to Crack the Code of Hawaiian Monk Seal Chatter', Abstract S2-3: 'Pied flycatcher males and AI-based models rely on similar features for song discrimination at the population level'"
+  },
+  {
+    "front": "What specific ecological finding did AI models reveal about pied flycatcher song discrimination?",
+    "back": "Custom explainable AI models suggested the first part of the song (first syllables) as key features for population-level classification, aligning with how the birds themselves perceive song differences.",
+    "source": "Abstract S2-3: 'Pied flycatcher males and AI-based models rely on similar features for song discrimination at the population level'"
+  },
+  {
+    "front": "What deep learning network was successfully used to analyze Hawaiian Monk Seal chatter?",
+    "back": "A YOLO (You Only Look Once) deep-learning network was used to detect and classify calls, achieving 95% accuracy.",
+    "source": "Abstract S2-4: 'Using AI to Crack the Code of Hawaiian Monk Seal Chatter'"
+  },
+  {
+    "front": "What was a key finding from the AI analysis of Hawaiian Monk Seal vocal patterns?",
+    "back": "The AI detector allowed investigation of vocal patterns in activity in relation to physiological status and call sequencing within bouts, validating trends observed in manually annotated data.",
+    "source": "Abstract S2-4: 'Using AI to Crack the Code of Hawaiian Monk Seal Chatter'"
+  },
+  {
+    "front": "What are the common goals of initiatives aiming to establish robust machine learning pipelines for specific animal bioacoustics research, such as for canines?",
+    "back": "To create a modular, process-oriented machine learning pipeline to support canine bioacoustics research in lab and field settings, and build a large-scale, open-access dataset of annotated vocalizations for dogs (e.g., the STRELKA project).",
+    "source": "Abstract S2-5: 'But what does the dog say? Toward a modular machine learning pipeline for canine bioacoustics research'"
+  },
+  {
+    "front": "Why is citizen science valuable for bioacoustic research and conservation?",
+    "back": "It increases data contribution, allows for unprecedented spatial and temporal scale of monitoring, offers cost-effectiveness, brings diverse perspectives, aids in data validation, and fosters public engagement/education for conservation.",
+    "source": "Abstract S2-6: 'Deep learning for acoustic classification of Orthoptera and Cicadidae in Switzerland'"
+  },
+  {
+    "front": "What specific taxonomic groups are the focus of deep learning classification in a particular bioacoustic study mentioned?",
+    "back": "Orthoptera (grasshoppers, crickets) and Cicadidae (cicadas).",
+    "source": "Abstract S2-6: 'Deep learning for acoustic classification of Orthoptera and Cicadidae in Switzerland'"
+  },
+  {
+    "front": "What communicative role do nonlinear phenomena (NLP) play in the whines of domestic dog puppies?",
+    "back": "Nonlinear phenomena (NLP) in dog puppy whines are critical for signaling distress. Their production increases with separation time, and they elicit stronger attentional and caregiving responses from both dog mothers and human listeners.",
+    "source": "Abstract S1-1: 'Do nonlinear phenomena in dog puppy whines signal distress?'"
+  },
+  {
+    "front": "How does the occurrence of nonlinear phenomena (NLP) in African Penguin begging calls correlate with the chicks' health status?",
+    "back": "The occurrence of NLP in their begging calls significantly increases when chicks have severe respiratory diseases and decreases back to normal levels after successful antimicrobial treatment, making it a reliable indicator of health.",
+    "source": "Abstract S1-2: 'The hidden complexity of African Penguin begging calls: Nonlinear Vocal Phenomena and their significance'"
+  },
+  {
+    "front": "What are the two distinct laryngeal mechanisms that cause the large, abrupt frequency jumps observed in New World monkey vocalizations?",
+    "back": "The frequency jumps are caused by switching between two mechanisms: 1) vocal fold vibration alone, which produces low-frequency sounds, and 2) a mechanism incorporating vocal membranes, which results in much higher-frequency oscillations.",
+    "source": "Abstract S1-3: ''Monkey yodels'-frequency jumps in New World monkey vocalizations greatly surpass human vocal register transitions'"
+  },
+  {
+    "front": "How do vocalizations enriched with nonlinear phenomena (specifically sidebands) affect both bonobo and human listeners physiologically?",
+    "back": "Vocalizations artificially enriched with sidebands trigger physiological changes (measurable by ECG) in both bonobos and humans, highlighting a deeply rooted, cross-species sensitivity to these acoustic features in emotional communication.",
+    "source": "Abstract S1-4: 'Non-Linear phenomena in bonobo vocalizations: A key acoustic feature for emotional communication across species'"
+  },
+  {
+    "front": "How might humans' inherent sensitivity to nonlinear phenomena (NLP) in animal vocal signals have influenced the cultural evolution of distortion in music?",
+    "back": "This inherent sensitivity to the attention-grabbing and emotional qualities of NLP likely drove the adoption and technological development of similar distorted sounds in music, which then culturally evolved as a way for groups to coordinate internally and differentiate themselves.",
+    "source": "Abstract S1-5: 'The cultural evolution of distortion in music (and other norms of mixed appeal)'"
+  },
+  {
+    "front": "What are the primary communicative advantages of 'biphonation' in animal vocalizations?",
+    "back": "Biphonation allows for increased call complexity, which can facilitate individual recognition, convey multiple pieces of information simultaneously (e.g., at short vs. long distances), and may provide cues to the sender's direction of movement.",
+    "source": "Abstract S1-6: 'Biphonation in animal vocalizations: from communicative functions to production mechanisms'"
+  },
+  {
+    "front": "What are 'sidebands' in the context of acoustic analysis?",
+    "back": "Sidebands are additional frequency components that appear symmetrically above and below a fundamental frequency (and its harmonics) in a spectrogram. They are caused by the rapid modulation (in frequency or amplitude) of the sound source and are a hallmark of nonlinear phenomena.",
+    "source": null
+  },
+  {
+    "front": "How can sidebands in a vocalization convey specific information beyond just general 'noise'?",
+    "back": "As a structured form of nonlinearity, the specific rate and depth of modulation that create sidebands can vary between individuals, potentially providing cues to the sender's identity. They can also signal a specific degree of physiological stress or effort.",
+    "source": null
+  },
+  {
+    "front": "In a Convolutional Neural Network (CNN), what is a 'convolutional filter' and what is its primary role?",
+    "back": "A convolutional filter (or kernel) is a small matrix that slides over input data (like a spectrogram) to perform mathematical operations. Its primary role is feature detection—identifying specific patterns like edges, textures, or acoustic events.",
+    "source": null
+  },
+  {
+    "front": "What is the main purpose of a 'pooling layer' in a Convolutional Neural Network (CNN)?",
+    "back": "A pooling layer reduces the spatial dimensions of feature maps. This makes the network faster and more computationally efficient, while also making feature detection more robust to small variations in the feature's exact position (translational invariance).",
+    "source": null
+  },
+  {
+    "front": "How does 'Max Pooling' differ from 'Average Pooling'?",
+    "back": "Max Pooling selects the single highest value from a region of a feature map, focusing on the strongest presence of a feature. Average Pooling calculates the average value, providing a more smoothed, generalized representation of feature activity in that region.",
+    "source": null
+  },
+  {
+    "front": "What is meant by 'hierarchical feature learning' in a CNN?",
+    "back": "It is the process where a CNN learns features in increasing levels of complexity. Early layers detect simple features (e.g., lines, dots), and subsequent layers combine these into more complex patterns (e.g., shapes, textures) to ultimately recognize abstract objects or events.",
+    "source": null
+  },
+  {
+    "front": "What kind of physiological changes can lead to an increase in nonlinear phenomena in an animal's vocalizations?",
+    "back": "Physiological changes like inflammation, swelling of vocal tissues, mucus buildup, or muscle weakness caused by disease or distress can alter the physical properties (mass, tension, symmetry) of the vocal folds, disrupting stable oscillations and inducing nonlinearities.",
+    "source": null
+  },
+  {
+    "front": "What are two proposed physical mechanisms that can produce 'biphonation'?",
+    "back": "Two proposed mechanisms are: 1) Asymmetries in vocal fold oscillations, where left and right folds vibrate at different, non-harmonically related frequencies. 2) The involvement of a secondary vibrating structure (e.g., vocal membranes) in addition to the primary vocal folds.",
+    "source": "Abstract S1-6: 'Biphonation in animal vocalizations: from communicative functions to production mechanisms'"
+  },
+  {
+    "front": "What is the 'bitter(n) lesson' regarding machine learning in bioacoustics, according to the Perch v2 model findings?",
+    "back": "The lesson is that supervised training, when coupled with a large, in-domain, well-curated, and high-quality annotated dataset, creates an extremely strong baseline that is very difficult for other methods to outperform.",
+    "source": "S3-1: Perch v2: A foundation model for bioacoustics: Supervision is superb"
+  },
+  {
+    "front": "What is the critical limitation of relying solely on Passive Acoustic Monitoring (PAM) for detecting the presence of an animal?",
+    "back": "PAM only detects acoustic presence, not physical presence. If an animal is present but not vocalizing, it is completely invisible to the acoustic monitoring system.",
+    "source": "S3-3: Passive acoustic gliders are effective monitoring tools..."
+  },
+  {
+    "front": "What is a major reason why an AI model trained to detect a species in one location might fail when deployed in a new, geographically separate area?",
+    "back": "Many species exhibit geographic variation or 'dialects' in their vocalizations. A model trained on one population's calls may not recognize the slightly different calls of another population, leading to poor performance.",
+    "source": "S3-2: Robots, acoustics and Al, oh my..."
+  },
+  {
+    "front": "Acoustic indices often correlate well with the total 'amount' of biological sound, but what crucial ecological metric can they fail to represent accurately?",
+    "back": "Acoustic indices often correlate poorly with species richness (the number of different species). They are often better explained by total animal abundance (the total number of vocalizing individuals), which can be misleading if used as a proxy for biodiversity.",
+    "source": "S3-6: Soundscape as an indicator of ecological characteristics in a temperate primeval forest"
+  },
+  {
+    "front": "How can an AI detector trained on reef fish calls be used to provide actionable information for ecosystem management?",
+    "back": "The detector can be used to assess reef health by predicting key metrics like coral cover, fish abundance, and species richness. It can also be implemented in underwater robots for autonomous discovery and quantification of biological hotspots.",
+    "source": "S3-2: Robots, acoustics and Al, oh my..."
+  },
+  {
+    "front": "What are two key advancements helping to overcome the challenges of using PAM for managing fish populations?",
+    "back": "1) The development of portable audio-video arrays to get confirmed, in-situ recordings of species-specific calls. 2) The use of Convolutional Neural Networks (CNNs) to automate the detection of these calls in vast acoustic datasets.",
+    "source": "S3-4: Advancing passive acoustic monitoring for the management of commercially and ecologically important fish species"
+  },
+  {
+    "front": "What did a large-scale acoustic study of European marine forests (kelp and seagrass) reveal about their bioacoustic communities?",
+    "back": "The study found that acoustic communities were distinct between different habitats and varied significantly between sites, particularly within seagrass meadows. This shows that acoustic biodiversity can be used for habitat biogeography and to understand hidden animal communities.",
+    "source": "S3-5: Acoustic biogeography of European marine forests"
+  },
+  {
+        "front": "What is the core prediction of the Acoustic Adaptation Hypothesis (AAH)?",
+        "back": "The AAH predicts that acoustic signals will evolve to maximize transmission and minimize degradation in the specific environment they are used in. For example, lower frequencies are expected in dense forests to reduce scattering.",
+        "source": "S4-1: The acoustic adaptation hypothesis across terrestrial vertebrates: a meta-analysis"
+    },
+    {
+        "front": "Why do large-scale comparative studies often find weak or inconsistent support for the AAH?",
+        "back": "Because other factors, such as phylogenetic inertia (shared ancestry), morphological constraints (e.g., body size), and other selective pressures (e.g., sexual selection, avoiding predation), can override or compete with the selective pressures for optimal sound transmission.",
+        "source": "S4-1: The acoustic adaptation hypothesis across terrestrial vertebrates: a meta-analysis"
+    },
+    {
+        "front": "What is 'phylogenetic non-independence' (or phylogenetic inertia) in the context of bioacoustics?",
+        "back": "It is the phenomenon where closely related species share similar traits (like vocal frequency) because of their common ancestry, not because they independently evolved those traits in response to similar environments. This can confound comparative studies.",
+        "source": "S4-1: The acoustic adaptation hypothesis across terrestrial vertebrates: a meta-analysis"
+    },
+    {
+        "front": "What is the primary morphological factor that constrains vocal frequency in birds, and what is the relationship?",
+        "back": "Body mass is the primary factor. There is a strong negative relationship: larger body mass is associated with lower vocal frequency, a principle that aligns with Bergmann's rule.",
+        "source": "S4-2: Genetic and environmental determinants of vocal frequency variation in tinkerbirds"
+    },
+    {
+        "front": "How can climate (e.g., temperature) indirectly affect vocal frequency in birds?",
+        "back": "Temperature can influence body mass (according to Bergmann's rule, where animals in colder climates are larger). Since body mass strongly affects vocal frequency, temperature has an indirect effect on song via morphology.",
+        "source": "S4-2: Genetic and environmental determinants of vocal frequency variation in tinkerbirds"
+    },
+    {
+        "front": "What is the 'amplitude-complexity trade-off' in animal signals?",
+        "back": "It's a trade-off where increasing the amplitude (loudness) of a signal often comes at the cost of its acoustic complexity (e.g., rapid frequency modulations). A signal can be loud and simple or quiet and complex, but rarely both.",
+        "source": "S4-5: Soft yet complex: Acoustic trade-offs and social modulation of songs in star finches"
+    },
+    {
+        "front": "Under what social context would a bird favor a quiet, complex song over a loud, simple one?",
+        "back": "During close-range courtship directed at a single female. In this context, the richness of information in a complex signal is more important than long-distance broadcast.",
+        "source": "S4-5: Soft yet complex: Acoustic trade-offs and social modulation of songs in star finches"
+    },
+    {
+        "front": "How can vocal learning allow frequency to serve as an individual signature, independent of body size?",
+        "back": "Vocal learning allows for fine-tuned motor control over the vocal production system, enabling an individual to develop and maintain a unique and stable frequency pattern that is distinct from what would be predicted by its physical size alone.",
+        "source": "S4-6: When song frequency meets identity information. A case study in the Ortolan Bunting"
+    },
+    {
+        "front": "In the context of territorial disputes, what kind of social information does an individual's unique song frequency convey if it doesn't signal physical size?",
+        "back": "It signals individual identity. This allows a resident to use prior experience or reputation to assess the threat level of a specific intruder, rather than relying on a general indicator of size or fighting ability.",
+        "source": "S4-6: When song frequency meets identity information. A case study in the Ortolan Bunting"
+    },
+    {
+        "front": "Besides increasing amplitude, how do dolphins alter their whistles in response to sonar?",
+        "back": "They change the whistle production patterns, including altering the repertoire of whistle types used and modifying acoustic parameters like minimum frequency, mean slope, and the number of frequency steps to maintain communication.",
+        "source": "S4-4: Changes in whistle production patterns of long-beaked common dolphins (Delphinus capensis) in controlled exposure experiments"
+    },
+    {
+        "front": "What are two potential, measurable acoustic effects of air pollution (smog) on birdsong?",
+        "back": "1) Reduced song duration or complexity due to impaired lung capacity and respiratory function. 2) Lower song amplitude (volume) because of a weakened ability to forcefully push air through the syrinx.",
+        "source": "S4-3: Smog Songs"
+    },
+    {
+        "front": "What is phenotypic plasticity in the context of acoustic communication?",
+        "back": "It is the ability of an organism to change its acoustic traits in response to its environment. An example is a bird subtly adjusting its song frequency or timing based on the local habitat, which can occur much faster than genetic evolution.",
+        "source": "S4-1: The acoustic adaptation hypothesis across terrestrial vertebrates: a meta-analysis"
+    },
+    {
+    "front": "What is the primary difference between assessing a physiological impact (like hearing loss) versus a behavioral impact (like avoidance)?",
+    "back": "Physiological impacts (e.g., Auditory Evoked Potentials) often require capturing and immobilizing the animal, providing precise data under artificial conditions. Behavioral assessments occur in the wild, making it difficult to control variables and unambiguously attribute the behavior to the stimulus without careful experimental design.",
+    "source": "Themes from S5-1, S5-5"
+  },
+  {
+    "front": "What is the Auditory Evoked Potential (AEP) method?",
+    "back": "A neurophysiological technique that measures the brain's electrical response to an acoustic stimulus. It requires placing electrodes on a captured, stationary animal to determine its hearing thresholds and frequency range.",
+    "source": "Abstract S5-1: 'Pile driving noise...'"
+  },
+  {
+    "front": "What are the key limitations of AEP studies for understanding real-world noise impacts?",
+    "back": "AEP studies are conducted in artificial lab/tank settings on stressed, captive animals. They measure hearing sensitivity (what an animal *can* hear) but cannot measure behavioral responses or the ecological consequences of hearing loss in a natural environment.",
+    "source": "Abstract S5-1: 'Pile driving noise...'"
+  },
+  {
+    "front": "How do researchers establish a control condition for a behavioral response experiment in the wild?",
+    "back": "By comparing the animal's behavior during the stimulus exposure to its behavior during control periods. Essential control periods include the 'pre-exposure' period (immediately before the stimulus) and separate observation periods with no stimulus at all.",
+    "source": "Abstract S5-5: 'The reaction of bottlenose dolphins...'"
+  },
+  {
+    "front": "Contrast the ecological consequences of a short-term behavioral disruption versus a long-term sensory impairment.",
+    "back": "A short-term disruption (e.g., 4-min avoidance) carries energetic and opportunity costs (lost foraging). A longer-term impairment (e.g., 3-week hearing loss) persistently degrades an animal's ability to perform critical functions like foraging and predator detection, potentially reducing fitness over a prolonged period.",
+    "source": "Themes from S5-1, S5-5"
+  },
+  {
+    "front": "What is the difference between sound pressure and particle motion (acceleration)?",
+    "back": "Sound pressure is the change in pressure from the ambient (a scalar quantity), detected by animals with air-filled sacs (e.g., swim bladders). Particle motion is the physical oscillation of medium particles (a vector quantity), detected by animals like flounders that sense movement and vibration directly.",
+    "source": "Abstract S5-1: 'Pile driving noise...'"
+  },
+  {
+    "front": "How does a 50% reduction in an animal's acoustic detection radius affect its sensory monitoring area?",
+    "back": "It causes a 75% reduction in the total sensory area. The area of a circle is πr². Halving the radius (r) from 1 to 0.5 reduces the area from π to 0.25π, which is a reduction of 75%.",
+    "source": "Derived from S5-1"
+  },
+  {
+    "front": "What are the neurological steps in a vertebrate's startle response reflex arc?",
+    "back": "The sequence includes: sensory transduction, afferent nerve transmission, CNS processing (often via Mauthner cells in fish), efferent motor neuron activation, and finally, neuromuscular transmission and muscle contraction. Each step contributes to the total reaction time.",
+    "source": "General Neurobiology"
+  },
+  {
+    "front": "What is propeller cavitation?",
+    "back": "A process where a propeller spinning rapidly creates low-pressure zones in the water, causing it to 'boil' and form vapor bubbles. The violent collapse of these bubbles as they move to higher pressure areas generates intense, broadband underwater noise.",
+    "source": "Abstract S5-2: 'Is the high occurrence of loud...'"
+  },
+  {
+    "front": "Define Source Level (SL).",
+    "back": "Source Level (SL) is a standardized measure of the acoustic intensity of a sound source, reported as the sound pressure level at a reference distance of 1 meter. It allows for direct comparison between different sound sources.",
+    "source": "Abstract S5-3: 'Characterizing vessel noise...'"
+  },
+  {
+    "front": "Define Sound Exposure Level (SEL).",
+    "back": "Sound Exposure Level (SEL) is a dose-metric that measures the total acoustic energy of a sound event by integrating the squared sound pressure over the event's duration. It is used to assess cumulative exposure and risk of hearing damage.",
+    "source": "Abstract S5-2: 'Is the high occurrence of loud...'"
+  },
+  {
+    "front": "Why are high-frequency 'super-cavitation transients' a particular threat to toothed whales?",
+    "back": "Because their ultrasonic frequencies (e.g., 51 kHz) directly overlap with and mask the high-frequency clicks used by toothed whales for echolocation, which is essential for foraging and navigation. This is a more direct threat than low-frequency ship noise.",
+    "source": "Abstract S5-2: 'Is the high occurrence of loud...'"
+  },
+  {
+    "front": "How do a toothed whale's echolocation clicks change between the 'search' and 'terminal buzz' phases?",
+    "back": "In the search phase, clicks are loud and have a low repetition rate for long-range detection. In the terminal buzz phase (final moments before capture), the click repetition rate becomes very high, but the intensity (source level) decreases significantly.",
+    "source": "General Cetacean Bioacoustics"
+  },
+  {
+    "front": "Why do toothed whales decrease the intensity of their echolocation clicks during the terminal buzz?",
+    "back": "To prevent sensory overload. If they used full-power clicks at close range, the returning echoes would be deafeningly loud. Reducing the source level keeps the received echo level within the optimal dynamic range of their hearing.",
+    "source": "General Cetacean Bioacoustics"
+  },
+  {
+    "front": "What was the main finding regarding summer flounder hearing after pile-driving exposure?",
+    "back": "Summer flounders experienced a temporary hearing threshold shift (TTS) of 4-7 dB after just one 15-minute exposure to pile-driving. Hearing sensitivity recovered after a 3-week period.",
+    "source": "Abstract S5-1: 'Pile driving noise...'"
+  },
+  {
+    "front": "What was the primary goal of the vessel noise study in Glacier Bay National Park?",
+    "back": "To characterize the acoustic source levels of different vessel categories and understand how source level relates to transit speed. This data will be used to model and manage soundscapes in the park.",
+    "source": "Abstract S5-3: 'Characterizing vessel noise...'"
+  },
+  {
+    "front": "How did vessel presence affect the acoustic behavior of Indo-Pacific humpback dolphins in Malaysia?",
+    "back": "The whistle rate was significantly lower *after* boat presence compared to *before*. In smaller groups, whistle duration was longer after boat presence, suggesting a behavioral modification to maintain communication in a noisy environment.",
+    "source": "Abstract S5-4: 'Impacts of vessel noise...'"
+  },
+  {
+    "front": "What was the main finding of the study on songbirds and 'Phantom road/turbine' noise?",
+    "back": "Bird abundance decreased significantly during the noise treatment period, providing evidence of a negative impact of noise on habitat selection. Acoustic monitoring was essential for detecting this noise-related behavioral impact.",
+    "source": "Abstract S5-6: 'Using bioacoustic tools...'"
+  }
+]

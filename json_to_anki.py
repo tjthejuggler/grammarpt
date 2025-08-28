@@ -116,15 +116,77 @@ class AnkiCardReviewer(QWidget):
 def main():
     # Accept JSON file path as argument, else exit
     if len(sys.argv) < 2:
-        QMessageBox.warning(None, "No Cards", "No JSON file provided.")
-        sys.exit(0)
+        print("No JSON file provided.", file=sys.stderr)
+        sys.exit(1)
     json_path = sys.argv[1]
+    import re
     with open(json_path, "r", encoding="utf-8") as f:
-        data = json.load(f)
+        text = f.read()
+    # Extract the first JSON array from the text, even if surrounded by other content
+    # First, try to remove markdown code block markers if present
+    cleaned_text = text
+    if '```json' in text and '```' in text:
+        # Extract content between ```json and ```
+        start_marker = text.find('```json')
+        if start_marker != -1:
+            start_content = start_marker + len('```json')
+            end_marker = text.find('```', start_content)
+            if end_marker != -1:
+                cleaned_text = text[start_content:end_marker].strip()
+    
+    # Remove emojis and other problematic Unicode characters
+    # Keep only printable ASCII characters, newlines, and common punctuation
+    import unicodedata
+    cleaned_chars = []
+    for char in cleaned_text:
+        # Keep ASCII printable characters, newlines, tabs, and spaces
+        if ord(char) < 128 or char in ['\n', '\r', '\t']:
+            cleaned_chars.append(char)
+        # Skip emojis and other Unicode symbols
+        elif unicodedata.category(char).startswith('S'):
+            continue
+        # Keep other characters that might be in JSON strings
+        else:
+            cleaned_chars.append(char)
+    
+    cleaned_text = ''.join(cleaned_chars)
+    
+    # Look for opening bracket, then find matching closing bracket
+    start_idx = cleaned_text.find('[')
+    if start_idx == -1:
+        print("No opening bracket '[' found in text.", file=sys.stderr)
+        sys.exit(1)
+    
+    # Find the matching closing bracket by counting brackets
+    bracket_count = 0
+    end_idx = -1
+    for i in range(start_idx, len(cleaned_text)):
+        if cleaned_text[i] == '[':
+            bracket_count += 1
+        elif cleaned_text[i] == ']':
+            bracket_count -= 1
+            if bracket_count == 0:
+                end_idx = i
+                break
+    
+    if end_idx == -1:
+        print("No matching closing bracket ']' found in text.", file=sys.stderr)
+        sys.exit(1)
+    
+    json_text = cleaned_text[start_idx:end_idx + 1]
+    match = type('Match', (), {'group': lambda self, n: json_text})()
+    if not match:
+        print("No JSON array found in file.", file=sys.stderr)
+        sys.exit(1)
+    try:
+        data = json.loads(match.group(0))
+    except Exception as e:
+        print(f"Failed to parse JSON array: {e}", file=sys.stderr)
+        sys.exit(1)
     cards = [item for item in data if "front" in item and "back" in item]
     if not cards:
-        QMessageBox.warning(None, "No Cards", "No valid cards found in JSON.")
-        sys.exit(0)
+        print("No valid cards found in JSON.", file=sys.stderr)
+        sys.exit(1)
     app = QApplication(sys.argv)
     reviewer = AnkiCardReviewer(cards)
     reviewer.show()
